@@ -88,7 +88,21 @@ public class VLMTypeRegistry: ModelTypeRegistry, @unchecked Sendable {
             "idefics3": create(Idefics3Configuration.self, Idefics3.init),
             "gemma3": create(Gemma3Configuration.self, Gemma3.init),
             "smolvlm": create(SmolVLM2Configuration.self, SmolVLM2.init),
+            "yuna-miru": create(YunaMiruConfiguration.self, YunaMiru.init),
         ]
+    }
+}
+
+private func create(
+    _ configurationType: YunaMiruProcessorConfiguration.Type,
+    _ processorInit: @escaping (YunaMiruProcessorConfiguration, any Tokenizer, Int) -> YunaMiruProcessor
+) -> (URL, any Tokenizer, URL) throws -> YunaMiruProcessor {
+    { processorUrl, tokenizer, modelConfigUrl in
+        let processorConfig = try JSONDecoder().decode(
+            configurationType, from: Data(contentsOf: processorUrl))
+        let modelConfig = try JSONDecoder().decode(
+            YunaMiruConfiguration.self, from: Data(contentsOf: modelConfigUrl))
+        return processorInit(processorConfig, tokenizer, modelConfig.imageTokenIndex)
     }
 }
 

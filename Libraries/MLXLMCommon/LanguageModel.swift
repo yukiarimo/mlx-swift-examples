@@ -73,12 +73,22 @@ public struct LMInput {
         public let pixels: MLXArray
         /// Time, height, and width of the images
         public let frames: [THW]?
+        /// Spatial shapes of the image patch grids (for models like YunaMiru)
+        public let spatialShapes: MLXArray?
+        /// Attention mask for image patches (for models like YunaMiru)
+        public let pixelAttentionMask: MLXArray?
+
 
         public init(
-            pixels: MLXArray, frames: [THW]? = nil
+            pixels: MLXArray,
+            frames: [THW]? = nil,
+            spatialShapes: MLXArray? = nil,
+            pixelAttentionMask: MLXArray? = nil
         ) {
             self.pixels = pixels
             self.frames = frames
+            self.spatialShapes = spatialShapes
+            self.pixelAttentionMask = pixelAttentionMask
         }
     }
 
